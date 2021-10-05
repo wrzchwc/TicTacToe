@@ -1,5 +1,6 @@
 package tictactoe;
 
+import javax.lang.model.type.UnionType;
 import java.util.*;
 
 import static tictactoe.Result.finalResult;
@@ -98,10 +99,14 @@ public class Game {
 
     private void moveAI(boolean order, String difficultyLevel) {
         System.out.println("Making move level \"" + difficultyLevel + "\"");
-        if ("medium".equals(difficultyLevel))
+        if ("hard".equals(difficultyLevel)) {
+            hardMove(order);
+        } else if ("medium".equals(difficultyLevel)) {
             mediumMove(order);
-        else
+        } else {
             easyMove(order);
+        }
+
     }
 
     private void easyMove(boolean order) {
@@ -130,18 +135,18 @@ public class Game {
         var tmp = order ? "X" : "O";
         var empty = 0;
         for (String[] row : board) {
-            int[] x_o_e = new int[]{0, 0, 0};
+            int[] xoe = new int[]{0, 0, 0};
             for (int i = 0; i < 3; i++) {
                 if (row[i].equals("X"))
-                    x_o_e[0]++;
+                    xoe[0]++;
                 else if (row[i].equals("O"))
-                    x_o_e[1]++;
+                    xoe[1]++;
                 else {
-                    x_o_e[2]++;
+                    xoe[2]++;
                     empty = i;
                 }
             }
-            if ((x_o_e[0] == 2 || x_o_e[1] == 2) && x_o_e[2] == 1) {
+            if ((xoe[0] == 2 || xoe[1] == 2) && xoe[2] == 1) {
                 row[empty] = tmp;
                 return true;
             }
@@ -210,5 +215,77 @@ public class Game {
         return null;
     }
 
+    private int minMax(String[][] board, boolean order, ArrayList<int[]> cells) {
+        var decisions = new ArrayList<Integer>();
+        for (int[] cell : cells) {
+            board[cell[0]][cell[1]] = order ? "X" : "O";
+            switch (finalResult(board)) {
+                case "Game not finished":
+                    decisions.add(minMax(board, !order, empty(board)));
+                    break;
+                case "X wins":
+                    decisions.add(1);
+                    break;
+                case "O wins":
+                    decisions.add(-1);
+                    break;
+                case "Draw":
+                    decisions.add(0);
+                    break;
+            }
+            board[cell[0]][cell[1]] = " ";
+        }
+        var optimal = decisions.get(0);
+
+        for (int i = 1; i < decisions.size(); i++) {
+            if ((order && decisions.get(i) > optimal) || (!order && decisions.get(i) < optimal)) {
+                optimal = decisions.get(i);
+            }
+        }
+
+        return optimal;
+    }
+
+    private ArrayList<int[]> empty(String[][] board) {
+        var list = new ArrayList<int[]>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j].equals(" ")) {
+                    list.add(new int[]{i, j});
+                }
+            }
+        }
+        return list;
+    }
+
+    private void hardMove(boolean order) {
+
+        var cells = empty(board);
+        var decisions = new ArrayList<Integer>();
+        var move = order ? "X" : "O";
+        for (int[] cell : cells) {
+            board[cell[0]][cell[1]] = order ? "X" : "O";
+            decisions.add(minMax(board, order, empty(board)));
+            board[cell[0]][cell[1]] = " ";
+        }
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < decisions.size(); j++) {
+                if (decisions.get(j) == 1) {
+                    board[cells.get(j)[0]][cells.get(j)[1]] = move;
+                    return;
+                } else if (decisions.get(j) == 0) {
+                    board[cells.get(j)[0]][cells.get(j)[1]] = move;
+                    return;
+                }
+
+            }
+        }
+
+
+    }
+
 
 }
+
+
