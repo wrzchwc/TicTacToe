@@ -215,35 +215,55 @@ public class Game {
         return null;
     }
 
-    private int minMax(String[][] board, boolean order, ArrayList<int[]> cells) {
-        var decisions = new ArrayList<Integer>();
+    private int minMax(String[][] board, boolean order, ArrayList<int[]> cells, int depth) {
+        int[] decisions = new int[cells.size()];
+        var decisionID = 0;
+
         for (int[] cell : cells) {
             board[cell[0]][cell[1]] = order ? "X" : "O";
             switch (finalResult(board)) {
                 case "Game not finished":
-                    decisions.add(minMax(board, !order, empty(board)));
+                    decisions[decisionID++] = minMax(board, !order, empty(board), depth);
                     break;
                 case "X wins":
-                    decisions.add(1);
+                    decisions[decisionID++] = 1;
                     break;
                 case "O wins":
-                    decisions.add(-1);
+                    decisions[decisionID++] = -1;
                     break;
                 case "Draw":
-                    decisions.add(0);
+                    decisions[decisionID++] = 0;
                     break;
             }
             board[cell[0]][cell[1]] = " ";
         }
-        var optimal = decisions.get(0);
 
-        for (int i = 1; i < decisions.size(); i++) {
-            if ((order && decisions.get(i) > optimal) || (!order && decisions.get(i) < optimal)) {
-                optimal = decisions.get(i);
+        if (decisionID == depth) {
+            var listOfDecisions = convert(decisions);
+            if (order && listOfDecisions.contains(1)) {
+                return listOfDecisions.indexOf(1);
+            } else if (!order && listOfDecisions.contains(-1)) {
+                return listOfDecisions.indexOf(-1);
+            } else if (listOfDecisions.contains(0)) {
+                return listOfDecisions.indexOf(0);
+            } else if (order && listOfDecisions.contains(-1)) {
+                return listOfDecisions.indexOf(-1);
+            } else if (!order && listOfDecisions.contains(1)) {
+                return listOfDecisions.indexOf(1);
+            } else {
+                return 0;
             }
+        } else {
+            return order ? Arrays.stream(decisions).max().getAsInt() : Arrays.stream(decisions).min().getAsInt();
         }
+    }
 
-        return optimal;
+    private ArrayList<Integer> convert(int[] array) {
+        var list = new ArrayList<Integer>();
+        for (Integer a : array) {
+            list.add(a);
+        }
+        return list;
     }
 
     private ArrayList<int[]> empty(String[][] board) {
@@ -259,28 +279,9 @@ public class Game {
     }
 
     private void hardMove(boolean order) {
-
         var cells = empty(board);
-        var decisions = new ArrayList<Integer>();
-        var move = order ? "X" : "O";
-        for (int[] cell : cells) {
-            board[cell[0]][cell[1]] = order ? "X" : "O";
-            decisions.add(minMax(board, order, empty(board)));
-            board[cell[0]][cell[1]] = " ";
-        }
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < decisions.size(); j++) {
-                if (decisions.get(j) == 1) {
-                    board[cells.get(j)[0]][cells.get(j)[1]] = move;
-                    return;
-                } else if (decisions.get(j) == 0) {
-                    board[cells.get(j)[0]][cells.get(j)[1]] = move;
-                    return;
-                }
-
-            }
-        }
+        var tmp = minMax(board, order, cells, cells.size());
+        board[cells.get(tmp)[0]][cells.get(tmp)[1]] = order ? "X" : "O";
 
 
     }
