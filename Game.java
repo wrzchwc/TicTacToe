@@ -17,8 +17,8 @@ public class Game {
 
     public Game(HashMap<String, String> parameters) {
         this.board = new String[3][3];
-        this.playerX = parameters.get("playerX");
-        this.playerO = parameters.get("playerO");
+        this.playerX = parameters.get(PLAYER_X);
+        this.playerO = parameters.get(PLAYER_O);
         for (String[] row : board) {
             Arrays.fill(row, EMPTY);
         }
