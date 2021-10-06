@@ -136,7 +136,7 @@ public class Game {
 
     private boolean winOrBlockRow(boolean order) {
         for (String[] row : board) {
-            if ((count(row, "X") == 2 || count(row, "O") == 2) && count(row, " ") == 1) {
+            if ((countStrings(row, "X") == 2 || countStrings(row, "O") == 2) && countStrings(row, " ") == 1) {
                 row[convertString(row).indexOf(" ")] = move(order);
                 return true;
             }
@@ -144,7 +144,7 @@ public class Game {
         return false;
     }
 
-    private int count(String[] array, String string) {
+    private int countStrings(String[] array, String string) {
         var number = 0;
         for (String a : array) {
             if (a.equals(string)) {
@@ -155,37 +155,15 @@ public class Game {
     }
 
     private boolean winOrBlockColumn(boolean order) {
-        var tmp = move(order);
-        var empty = 0;
+        var columns = getColumns(board);
         for (int i = 0; i < 3; i++) {
-            int[] x_o_e = new int[]{0, 0, 0};
-            for (int j = 0; j < 3; j++) {
-                if (board[j][i].equals("X"))
-                    x_o_e[0]++;
-                else if (board[j][i].equals("O"))
-                    x_o_e[1]++;
-                else {
-                    x_o_e[2]++;
-                    empty = j;
-                }
-            }
-            if ((x_o_e[0] == 2 || x_o_e[1] == 2) && x_o_e[2] == 1) {
-                board[empty][i] = tmp;
+            var column = columns.get(i);
+            var tmp = convertString(column);
+            if ((countStrings(column, "X") == 2 || countStrings(column, "O") == 2) && countStrings(column, " ") == 1) {
+                board[tmp.indexOf(" ")][i] = move(order);
                 return true;
             }
         }
-//        var columns = getColumns(board);
-//        System.out.println(columns.size());
-//        for (String[] column : columns) {
-//            var tmp = convertString(column);
-//            if (count(column, "X") == 2 && count(column, " ") == 1) {
-//                column[tmp.indexOf(" ")] = move(order);
-//                return true;
-//            } else if (count(column, "O") == 2 && count(column, " ") == 1) {
-//                column[tmp.indexOf(" ")] = move(order);
-//                return true;
-//            }
-//        }
         return false;
     }
 
