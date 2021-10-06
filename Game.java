@@ -2,20 +2,25 @@ package tictactoe;
 
 import java.util.*;
 
-import static tictactoe.Result.finalResult;
-import static tictactoe.Result.getColumns;
+import static tictactoe.Result.*;
 
 public class Game {
     private final String[][] board;
     private final String playerX;
     private final String playerO;
 
+    public static final String EMPTY = " ";
+    public static final String X = "X";
+    public static final String O = "O";
+    public static final String PLAYER_X = "playerX";
+    public static final String PLAYER_O = "playerO";
+
     public Game(HashMap<String, String> parameters) {
         this.board = new String[3][3];
         this.playerX = parameters.get("playerX");
         this.playerO = parameters.get("playerO");
         for (String[] row : board) {
-            Arrays.fill(row, " ");
+            Arrays.fill(row, EMPTY);
         }
     }
 
@@ -24,7 +29,7 @@ public class Game {
         for (int i = 0; i < 3; i++) {
             System.out.print("| ");
             for (int j = 0; j < 3; j++)
-                System.out.print(board[i][j] + " ");
+                System.out.print(board[i][j] + EMPTY);
             System.out.println("|");
         }
         printPadding();
@@ -36,7 +41,7 @@ public class Game {
 
     public void start() {
         var order = true;
-        while (finalResult(board).equals("Game not finished")) {
+        while (finalResult(board).equals(NOT_FINISHED)) {
             printBoard();
             if (order) {
                 if (playerX.equals("user")) {
@@ -91,7 +96,7 @@ public class Game {
     private boolean moveUser(int[] coordinates, boolean playerX) {
         var row = coordinates[0];
         var column = coordinates[1];
-        if (board[row][column].equals(" ")) {
+        if (board[row][column].equals(EMPTY)) {
             board[row][column] = playerX ? "X" : "O";
             return true;
         } else {
@@ -101,9 +106,9 @@ public class Game {
 
     private void moveAI(boolean order, String difficultyLevel) {
         System.out.println("Making move level \"" + difficultyLevel + "\"");
-        if ("hard".equals(difficultyLevel)) {
+        if (difficultyLevel.equals("hard")) {
             hardMove(order);
-        } else if ("medium".equals(difficultyLevel)) {
+        } else if (difficultyLevel.equals("medium")) {
             mediumMove(order);
         } else {
             easyMove(order);
@@ -111,7 +116,7 @@ public class Game {
     }
 
     String move(boolean order) {
-        return order ? "X" : "O";
+        return order ? X : O;
     }
 
     private void easyMove(boolean order) {
@@ -119,7 +124,7 @@ public class Game {
         while (true) {
             var row = random.nextInt(3);
             var column = random.nextInt(3);
-            if (board[row][column].equals(" ")) {
+            if (board[row][column].equals(EMPTY)) {
                 board[row][column] = move(order);
                 break;
             }
@@ -136,8 +141,8 @@ public class Game {
 
     private boolean winOrBlockRow(boolean order) {
         for (String[] row : board) {
-            if ((countStrings(row, "X") == 2 || countStrings(row, "O") == 2) && countStrings(row, " ") == 1) {
-                row[convertString(row).indexOf(" ")] = move(order);
+            if ((countStrings(row, X) == 2 || countStrings(row, O) == 2) && countStrings(row, EMPTY) == 1) {
+                row[convertStrings(row).indexOf(EMPTY)] = move(order);
                 return true;
             }
         }
@@ -158,9 +163,9 @@ public class Game {
         var columns = getColumns(board);
         for (int i = 0; i < 3; i++) {
             var column = columns.get(i);
-            var tmp = convertString(column);
-            if ((countStrings(column, "X") == 2 || countStrings(column, "O") == 2) && countStrings(column, " ") == 1) {
-                board[tmp.indexOf(" ")][i] = move(order);
+            var tmp = convertStrings(column);
+            if ((countStrings(column, X) == 2 || countStrings(column, O) == 2) && countStrings(column, EMPTY) == 1) {
+                board[tmp.indexOf(EMPTY)][i] = move(order);
                 return true;
             }
         }
@@ -168,40 +173,29 @@ public class Game {
     }
 
     private boolean winOrBlockDiagonal(boolean order) {
-        var tmp = move(order);
-        String[] leftDownDiagonal = new String[]{board[0][0], board[1][1], board[2][2]};
-        String[] rightDownDiagonal = new String[]{board[0][2], board[1][1], board[2][0]};
-        var lDD = analyzeDiagonal(leftDownDiagonal);
-        var rDD = analyzeDiagonal(rightDownDiagonal);
-        if (lDD != null) {
-            board[lDD][lDD] = tmp;
-            return true;
-        } else if (rDD != null) {
-            if (rDD == 0)
-                board[rDD][rDD + 2] = tmp;
-            else if (rDD == 1)
-                board[rDD][rDD] = tmp;
-            else
-                board[rDD][rDD - 2] = tmp;
-            return true;
+        var diagonals = getDiagonals(board);
+        for (int i = 0; i < 2; i++) {
+            var tmp = analyzeDiagonal(diagonals.get(i));
+            if (tmp != null) {
+                if (i == 0 || tmp == 1) {
+                    board[tmp][tmp] = move(order);
+                } else {
+                    if (tmp == 0) {
+                        board[tmp][tmp + 2] = move(order);
+                    } else if (tmp == 2) {
+                        board[tmp][tmp - 2] = move(order);
+                    }
+                }
+                return true;
+            }
         }
         return false;
     }
 
     private Integer analyzeDiagonal(String[] diagonal) {
-        int[] x_o_e = new int[]{0, 0, 0};
-        for (String d : diagonal) {
-            if (d.equals("X"))
-                x_o_e[0]++;
-            else if (d.equals("O"))
-                x_o_e[1]++;
-            else
-                x_o_e[2]++;
+        if ((countStrings(diagonal, X) == 2 || countStrings(diagonal, O) == 2) && countStrings(diagonal, EMPTY) == 1) {
+            return convertStrings(diagonal).indexOf(EMPTY);
         }
-        if ((x_o_e[0] == 2 || x_o_e[1] == 2) && x_o_e[2] == 1)
-            for (int i = 0; i < diagonal.length; i++)
-                if (diagonal[i].equals(" "))
-                    return i;
         return null;
     }
 
@@ -212,40 +206,42 @@ public class Game {
         for (int[] cell : cells) {
             board[cell[0]][cell[1]] = move(order);
             switch (finalResult(board)) {
-                case "Game not finished":
+                case NOT_FINISHED:
                     decisions[decisionID++] = minMax(board, !order, empty(board), depth);
                     break;
-                case "X wins":
+                case X_WINS:
                     decisions[decisionID++] = 1;
                     break;
-                case "O wins":
+                case O_WINS:
                     decisions[decisionID++] = -1;
                     break;
-                case "Draw":
+                case DRAW:
                     decisions[decisionID++] = 0;
                     break;
             }
-            board[cell[0]][cell[1]] = " ";
+            board[cell[0]][cell[1]] = EMPTY;
         }
 
         if (decisionID == depth) {
-            var listOfDecisions = convertInt(decisions);
-            if (order && listOfDecisions.contains(1)) {
-                return listOfDecisions.indexOf(1);
-            } else if (!order && listOfDecisions.contains(-1)) {
-                return listOfDecisions.indexOf(-1);
-            } else if (listOfDecisions.contains(0)) {
-                return listOfDecisions.indexOf(0);
-            } else if (order && listOfDecisions.contains(-1)) {
-                return listOfDecisions.indexOf(-1);
-            } else if (!order && listOfDecisions.contains(1)) {
-                return listOfDecisions.indexOf(1);
-            } else {
-                return 0;
-            }
-        } else {
-            return order ? Arrays.stream(decisions).max().getAsInt() : Arrays.stream(decisions).min().getAsInt();
+            return indexOfDecision(convertInt(decisions), order);
         }
+        return order ? Arrays.stream(decisions).max().getAsInt() : Arrays.stream(decisions).min().getAsInt();
+
+    }
+
+    private int indexOfDecision(ArrayList<Integer> listOfDecisions, boolean order) {
+        if (order && listOfDecisions.contains(1)) {
+            return listOfDecisions.indexOf(1);
+        } else if (!order && listOfDecisions.contains(-1)) {
+            return listOfDecisions.indexOf(-1);
+        } else if (listOfDecisions.contains(0)) {
+            return listOfDecisions.indexOf(0);
+        } else if (order && listOfDecisions.contains(-1)) {
+            return listOfDecisions.indexOf(-1);
+        } else if (!order && listOfDecisions.contains(1)) {
+            return listOfDecisions.indexOf(1);
+        }
+        return 0;
     }
 
     private ArrayList<Integer> convertInt(int[] array) {
@@ -256,7 +252,7 @@ public class Game {
         return list;
     }
 
-    private ArrayList<String> convertString(String[] array) {
+    private ArrayList<String> convertStrings(String[] array) {
         return new ArrayList<>(Arrays.asList(array));
     }
 
@@ -264,7 +260,7 @@ public class Game {
         var list = new ArrayList<int[]>();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (board[i][j].equals(" ")) {
+                if (board[i][j].equals(EMPTY)) {
                     list.add(new int[]{i, j});
                 }
             }

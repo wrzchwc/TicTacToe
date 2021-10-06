@@ -3,9 +3,16 @@ package tictactoe;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static tictactoe.Game.*;
+
 public class Result {
-    private static final String[] X = new String[]{"X", "X", "X"};
-    private static final String[] O = new String[]{"O", "O", "O"};
+    private static final String[] X3 = new String[]{X, X, X};
+    private static final String[] O3 = new String[]{O, O, O};
+
+    public static final String X_WINS = "X wins";
+    public static final String O_WINS = "O wins";
+    public static final String DRAW = "Draw";
+    public static final String NOT_FINISHED = "Game not finished";
 
     public static String finalResult(String[][] board) {
         if (checkRows(board) != null) {
@@ -17,16 +24,16 @@ public class Result {
         } else if (checkOver(board) != null) {
             return checkOver(board);
         }
-        return "Draw";
+        return DRAW;
     }
 
 
     private static String checkRows(String[][] board) {
         for (String[] row : board) {
-            if (Arrays.equals(row, X)) {
-                return "X wins";
-            } else if (Arrays.equals(row, O)) {
-                return "O wins";
+            if (Arrays.equals(row, X3)) {
+                return X_WINS;
+            } else if (Arrays.equals(row, O3)) {
+                return O_WINS;
             }
         }
         return null;
@@ -34,10 +41,10 @@ public class Result {
 
     private static String checkColumns(String[][] board) {
         for (String[] column : getColumns(board)) {
-            if (Arrays.equals(column, X)) {
-                return "X wins";
-            } else if (Arrays.equals(column, O)) {
-                return "O wins";
+            if (Arrays.equals(column, X3)) {
+                return X_WINS;
+            } else if (Arrays.equals(column, O3)) {
+                return O_WINS;
             }
         }
         return null;
@@ -45,24 +52,25 @@ public class Result {
 
     public static ArrayList<String[]> getColumns(String[][] board) {
         var columns = new ArrayList<String[]>();
-        for (int i = 0; i < 3; i++) {
-            String[] tmp = new String[3];
-            for (int j = 0; j < 3; j++) {
-                tmp[j] = board[j][i];
-            }
-            columns.add(tmp);
-        }
+        columns.add(new String[]{board[0][0], board[1][0],board[2][0]});
+        columns.add(new String[]{board[0][1], board[1][1],board[2][1]});
+        columns.add(new String[]{board[0][2], board[1][2],board[2][2]});
         return columns;
     }
 
-    private static String checkDiagonals(String[][] board) {
-        String[] leftDownDiagonal = new String[]{board[0][0], board[1][1], board[2][2]};
-        String[] rightDownDiagonal = new String[]{board[0][2], board[1][1], board[2][0]};
+    public static ArrayList<String[]> getDiagonals(String[][] board) {
+        var diagonals = new ArrayList<String[]>();
+        diagonals.add(new String[]{board[0][0], board[1][1], board[2][2]});
+        diagonals.add(new String[]{board[0][2], board[1][1], board[2][0]});
+        return diagonals;
+    }
 
-        if (Arrays.equals(leftDownDiagonal, X) || Arrays.equals(rightDownDiagonal, X)) {
-            return "X wins";
-        } else if (Arrays.equals(leftDownDiagonal, O) || Arrays.equals(rightDownDiagonal, O)) {
-            return "O wins";
+    private static String checkDiagonals(String[][] board) {
+        var diagonals = getDiagonals(board);
+        if (Arrays.equals(diagonals.get(0), X3) || Arrays.equals(diagonals.get(1), X3)) {
+            return X_WINS;
+        } else if (Arrays.equals(diagonals.get(0), O3) || Arrays.equals(diagonals.get(1), O3)) {
+            return O_WINS;
         }
         return null;
     }
@@ -70,8 +78,8 @@ public class Result {
     private static String checkOver(String[][] board) {
         for (String[] row : board) {
             for (String item : row) {
-                if (item.equals(" ")) {
-                    return "Game not finished";
+                if (item.equals(EMPTY)) {
+                    return NOT_FINISHED;
                 }
             }
         }
