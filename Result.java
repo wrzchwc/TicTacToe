@@ -1,5 +1,6 @@
 package tictactoe;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Result {
@@ -31,19 +32,18 @@ public class Result {
     }
 
     private static String checkColumns(String[][] board) {
-        for (int j = 0; j < 3; j++) {
-            var xs = 0;
-            var os = 0;
-            for (int i = 0; i < 3; i++) {
-                if (board[i][j].equals("X")) {
-                    xs++;
-                } else if (board[i][j].equals("O")) {
-                    os++;
-                }
+        var columns = new ArrayList<String[]>();
+        for (int i = 0; i < 3; i++) {
+            String[] tmp = new String[3];
+            for (int j = 0; j < 3; j++) {
+                tmp[j] = board[j][i];
             }
-            if (xs == 3) {
+            columns.add(tmp);
+        }
+        for (String[] column : columns) {
+            if (Arrays.equals(column, xWins)) {
                 return "X wins";
-            } else if (os == 3) {
+            } else if (Arrays.equals(column, oWins)) {
                 return "O wins";
             }
         }

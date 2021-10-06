@@ -1,6 +1,5 @@
 package tictactoe;
 
-import javax.lang.model.type.UnionType;
 import java.util.*;
 
 import static tictactoe.Result.finalResult;
@@ -14,9 +13,8 @@ public class Game {
         this.board = new String[3][3];
         this.playerX = parameters.get("playerX");
         this.playerO = parameters.get("playerO");
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++)
-                board[i][j] = " ";
+        for (String[] row : board) {
+            Arrays.fill(row, " ");
         }
     }
 
@@ -36,30 +34,34 @@ public class Game {
     }
 
     public void start() {
-        var gameOrder = true;
+        var order = true;
         while (finalResult(board).equals("Game not finished")) {
             printBoard();
-            if (playerX.equals("user")) {
-                if (moveUser(getCoordinates(), true)) {
-                    printBoard();
+            if (order) {
+                if (playerX.equals("user")) {
+                    while (!moveUser(getCoordinates(), true)) {
+                        cellOccupiedWarning();
+                    }
+                } else {
+                    moveAI(true, playerX);
+                }
+            } else {
+                if (playerO.equals("user")) {
+                    while (!moveUser(getCoordinates(), false)) {
+                        cellOccupiedWarning();
+                    }
+                } else {
                     moveAI(false, playerO);
                 }
-            } else if (playerO.equals("user")) {
-                moveAI(true, playerX);
-                printBoard();
-                while (true)
-                    if (moveUser(getCoordinates(), false))
-                        break;
-            } else {
-                if (gameOrder)
-                    moveAI(true, playerX);
-                else
-                    moveAI(false, playerO);
-                gameOrder = !gameOrder;
             }
+            order = !order;
         }
         printBoard();
         System.out.println(finalResult(board));
+    }
+
+    void cellOccupiedWarning() {
+        System.out.println("This cell is occupied! Choose another one!");
     }
 
     //coordinates[0] - row, coordinates[1] - column
@@ -92,7 +94,6 @@ public class Game {
             board[row][column] = playerX ? "X" : "O";
             return true;
         } else {
-            System.out.println("This cell is occupied! Choose another one!");
             return false;
         }
     }
@@ -106,19 +107,20 @@ public class Game {
         } else {
             easyMove(order);
         }
+    }
 
+    String move(boolean order) {
+        return order ? "X" : "O";
     }
 
     private void easyMove(boolean order) {
         var random = new Random();
-        if (!finalResult(board).equals("Draw")) {
-            while (true) {
-                var row = random.nextInt(3);
-                var column = random.nextInt(3);
-                if (board[row][column].equals(" ")) {
-                    board[row][column] = order ? "X" : "O";
-                    break;
-                }
+        while (true) {
+            var row = random.nextInt(3);
+            var column = random.nextInt(3);
+            if (board[row][column].equals(" ")) {
+                board[row][column] = move(order);
+                break;
             }
         }
     }
@@ -132,7 +134,7 @@ public class Game {
 
 
     private boolean winOrBlockRow(boolean order) {
-        var tmp = order ? "X" : "O";
+        var tmp = move(order);
         var empty = 0;
         for (String[] row : board) {
             int[] xoe = new int[]{0, 0, 0};
@@ -155,7 +157,7 @@ public class Game {
     }
 
     private boolean winOrBlockColumn(boolean order) {
-        var tmp = order ? "X" : "O";
+        var tmp = move(order);
         var empty = 0;
         for (int i = 0; i < 3; i++) {
             int[] x_o_e = new int[]{0, 0, 0};
@@ -178,7 +180,7 @@ public class Game {
     }
 
     private boolean winOrBlockDiagonal(boolean order) {
-        var tmp = order ? "X" : "O";
+        var tmp = move(order);
         String[] leftDownDiagonal = new String[]{board[0][0], board[1][1], board[2][2]};
         String[] rightDownDiagonal = new String[]{board[0][2], board[1][1], board[2][0]};
         var lDD = analyzeDiagonal(leftDownDiagonal);
@@ -220,7 +222,7 @@ public class Game {
         var decisionID = 0;
 
         for (int[] cell : cells) {
-            board[cell[0]][cell[1]] = order ? "X" : "O";
+            board[cell[0]][cell[1]] = move(order);
             switch (finalResult(board)) {
                 case "Game not finished":
                     decisions[decisionID++] = minMax(board, !order, empty(board), depth);
@@ -281,9 +283,7 @@ public class Game {
     private void hardMove(boolean order) {
         var cells = empty(board);
         var tmp = minMax(board, order, cells, cells.size());
-        board[cells.get(tmp)[0]][cells.get(tmp)[1]] = order ? "X" : "O";
-
-
+        board[cells.get(tmp)[0]][cells.get(tmp)[1]] = move(order);
     }
 
 
