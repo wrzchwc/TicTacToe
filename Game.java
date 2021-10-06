@@ -3,6 +3,7 @@ package tictactoe;
 import java.util.*;
 
 import static tictactoe.Result.finalResult;
+import static tictactoe.Result.getColumns;
 
 public class Game {
     private final String[][] board;
@@ -135,12 +136,8 @@ public class Game {
 
     private boolean winOrBlockRow(boolean order) {
         for (String[] row : board) {
-            var tmp = convertString(row);
-            if (count(row, "X") == 2 && count(row, " ") == 1) {
-                row[tmp.indexOf(" ")] = move(order);
-                return true;
-            } else if (count(row, "O") == 2 && count(row, " ") == 1) {
-                row[tmp.indexOf(" ")] = move(order);
+            if ((count(row, "X") == 2 || count(row, "O") == 2) && count(row, " ") == 1) {
+                row[convertString(row).indexOf(" ")] = move(order);
                 return true;
             }
         }
@@ -177,6 +174,18 @@ public class Game {
                 return true;
             }
         }
+//        var columns = getColumns(board);
+//        System.out.println(columns.size());
+//        for (String[] column : columns) {
+//            var tmp = convertString(column);
+//            if (count(column, "X") == 2 && count(column, " ") == 1) {
+//                column[tmp.indexOf(" ")] = move(order);
+//                return true;
+//            } else if (count(column, "O") == 2 && count(column, " ") == 1) {
+//                column[tmp.indexOf(" ")] = move(order);
+//                return true;
+//            }
+//        }
         return false;
     }
 
