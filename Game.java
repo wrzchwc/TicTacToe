@@ -97,7 +97,7 @@ public class Game {
         var row = coordinates[0];
         var column = coordinates[1];
         if (board[row][column].equals(EMPTY)) {
-            board[row][column] = playerX ? "X" : "O";
+            board[row][column] = playerX ? X : O;
             return true;
         } else {
             return false;
