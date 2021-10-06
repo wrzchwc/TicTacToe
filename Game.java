@@ -134,26 +134,27 @@ public class Game {
 
 
     private boolean winOrBlockRow(boolean order) {
-        var tmp = move(order);
-        var empty = 0;
         for (String[] row : board) {
-            int[] xoe = new int[]{0, 0, 0};
-            for (int i = 0; i < 3; i++) {
-                if (row[i].equals("X"))
-                    xoe[0]++;
-                else if (row[i].equals("O"))
-                    xoe[1]++;
-                else {
-                    xoe[2]++;
-                    empty = i;
-                }
-            }
-            if ((xoe[0] == 2 || xoe[1] == 2) && xoe[2] == 1) {
-                row[empty] = tmp;
+            var tmp = convertString(row);
+            if (count(row, "X") == 2 && count(row, " ") == 1) {
+                row[tmp.indexOf(" ")] = move(order);
+                return true;
+            } else if (count(row, "O") == 2 && count(row, " ") == 1) {
+                row[tmp.indexOf(" ")] = move(order);
                 return true;
             }
         }
         return false;
+    }
+
+    private int count(String[] array, String string) {
+        var number = 0;
+        for (String a : array) {
+            if (a.equals(string)) {
+                number++;
+            }
+        }
+        return number;
     }
 
     private boolean winOrBlockColumn(boolean order) {
@@ -241,7 +242,7 @@ public class Game {
         }
 
         if (decisionID == depth) {
-            var listOfDecisions = convert(decisions);
+            var listOfDecisions = convertInt(decisions);
             if (order && listOfDecisions.contains(1)) {
                 return listOfDecisions.indexOf(1);
             } else if (!order && listOfDecisions.contains(-1)) {
@@ -260,12 +261,16 @@ public class Game {
         }
     }
 
-    private ArrayList<Integer> convert(int[] array) {
+    private ArrayList<Integer> convertInt(int[] array) {
         var list = new ArrayList<Integer>();
         for (Integer a : array) {
             list.add(a);
         }
         return list;
+    }
+
+    private ArrayList<String> convertString(String[] array) {
+        return new ArrayList<>(Arrays.asList(array));
     }
 
     private ArrayList<int[]> empty(String[][] board) {
