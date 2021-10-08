@@ -1,8 +1,8 @@
-package tictactoe;
+package com.company;
 
 import java.util.*;
 
-import static tictactoe.Game.*;
+import static com.company.Game.*;
 
 public class Menu {
     private static final String EXIT = "exit";

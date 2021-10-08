@@ -1,8 +1,8 @@
-package tictactoe;
+package com.company;
 
 import java.util.*;
 
-import static tictactoe.Result.*;
+import static com.company.Result.*;
 
 public class Game {
     private final String[][] board;

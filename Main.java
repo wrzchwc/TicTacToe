@@ -1,8 +1,33 @@
-package tictactoe;
+package com.company;
 
-public class Main {
-    public static void main(String[] args) {
-        var menu = new Menu();
-        menu.run();
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(this.getClass().getResource("fxml/menu.fxml"));
+        StackPane stackPane = fxmlLoader.load();
+        Scene scene = new Scene(stackPane);
+
+        primaryStage.setTitle("Tic-Tac-Toe with AI");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+
     }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+//    public static void main(String[] args) {
+//        var menu = new Menu();
+//        menu.run();
+//    }
+
 }

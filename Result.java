@@ -1,9 +1,9 @@
-package tictactoe;
+package com.company;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static tictactoe.Game.*;
+import static com.company.Game.*;
 
 public class Result {
     private static final String[] X3 = new String[]{X, X, X};
