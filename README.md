@@ -33,7 +33,7 @@ empty.
 
 ![](images/screenshot4.jpg)
 
-Users can optionally change color of their symbols. The default one is `white`.
+Users can optionally change color of their symbols. The default one is `White`.
 
 ## Gameplay
 
