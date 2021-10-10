@@ -6,10 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -22,7 +21,16 @@ import static com.company.Game.PLAYER_O;
 import static com.company.Game.PLAYER_X;
 
 public class MenuController {
-
+    @FXML
+    public ColorPicker colorX;
+    @FXML
+    public ColorPicker colorO;
+    @FXML
+    public Label title;
+    @FXML
+    public Label left_label;
+    @FXML
+    public Label right_label;
     @FXML
     private ChoiceBox<String> levelX;
     @FXML
@@ -40,42 +48,54 @@ public class MenuController {
     private boolean disableLevelO = false;
     private boolean visibleNameX = false;
     private boolean disableLevelX = false;
+    private boolean visibleColorX = false;
+    private boolean visibleColorO = false;
     private static final String[] names = new String[2];
+    private static final Color[] colors = new Color[2];
 
     @FXML
     void initialize() {
         levelX.setItems(levels);
         levelO.setItems(levels);
-        nameX.setText(null);
-        nameO.setText(null);
+        levelX.setValue(levels.get(0));
+        levelO.setValue(levels.get(0));
+        colorX.setValue(Color.BLACK);
+        colorO.setValue(Color.BLACK);
     }
 
     @FXML
     public void userXClicked() {
         visibleNameX = !visibleNameX;
         disableLevelX = !disableLevelX;
+        visibleColorX = !visibleColorX;
         nameX.setVisible(visibleNameX);
         levelX.setDisable(disableLevelX);
-        levelX.setValue(null);
-        nameX.setText(null);
+        colorX.setVisible(visibleColorX);
+
     }
 
     @FXML
     public void userOClicked() {
         visibleNameO = !visibleNameO;
         disableLevelO = !disableLevelO;
+        visibleColorO = !visibleColorO;
         nameO.setVisible(visibleNameO);
         levelO.setDisable(disableLevelO);
-        levelO.setValue(null);
-        nameO.setText(null);
+        colorO.setVisible(visibleColorO);
     }
 
     @FXML
     public void playGame() throws IOException {
-        names[0] = nameX.getText() == null ? levelX.getValue() : nameX.getText();
-        names[1] = nameO.getText() == null ? levelO.getValue() : nameO.getText();
+        names[0] = visibleNameX ? nameX.getText() : levelX.getValue();
+        names[1] = visibleNameO ? nameO.getText() : levelO.getValue();
+
+
+        colors[0] = colorX.getValue();
+        colors[1] = colorO.getValue();
         changeScene("fxml/game.fxml", "Tic-Tac-Toe with AI");
+
     }
+
 
     public static String[] getNames() {
         return names;
@@ -101,4 +121,9 @@ public class MenuController {
         }
         return new HashMap<>(Map.of(PLAYER_X, parameters[0], PLAYER_O, parameters[1]));
     }
+
+    public static Color[] getColors() {
+        return colors;
+    }
+
 }

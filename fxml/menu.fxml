@@ -1,75 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.MenuController">
-   <VBox alignment="CENTER" spacing="20.0">
-      <Label alignment="TOP_CENTER" contentDisplay="TOP" text=" Tic-Tac-Toe with AI" textAlignment="CENTER" wrapText="true">
-         <font>
-            <Font size="49.0" />
-         </font>
-         <VBox.margin>
-            <Insets bottom="50.0" />
-         </VBox.margin>
-      </Label>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-         <VBox alignment="CENTER" spacing="10.0">
-            <Label text="Player X">
-               <font>
-                  <Font size="19.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER">
-               <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#userXClicked" prefHeight="39.0" prefWidth="90.0" text="user">
-                  <font>
-                     <Font size="18.0" />
-                  </font>
-               </ToggleButton>
-               <ChoiceBox fx:id="levelX" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="134.0" />
-            </HBox>
-            <TextField fx:id="nameX" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Player X's name" visible="false">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </TextField>
-         </VBox>
-         <VBox alignment="CENTER" spacing="10.0">
-            <Label text="Player O">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER">
-               <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#userOClicked" prefHeight="39.0" prefWidth="90.0" text="user">
-                  <font>
-                     <Font size="18.0" />
-                  </font>
-               </ToggleButton>
-               <ChoiceBox fx:id="levelO" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="134.0" />
-            </HBox>
-            <TextField fx:id="nameO" alignment="CENTER" promptText="Player O's name" visible="false">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </TextField>
-         </VBox>
-      </HBox>
-      <Button fx:id="play" graphicTextGap="0.0" mnemonicParsing="false" onMouseClicked="#playGame" text="PLAY" textAlignment="CENTER" textFill="#09e88f">
-         <font>
-            <Font size="24.0" />
-         </font>
-         <VBox.margin>
-            <Insets top="50.0" />
-         </VBox.margin>
-      </Button>
-   </VBox>
+<StackPane alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@../css/menu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.company.MenuController">
+    <VBox alignment="CENTER" spacing="20.0">
+        <Label fx:id="title" alignment="TOP_CENTER" contentDisplay="TOP" stylesheets="@../css/menu.css" text=" Tic-Tac-Toe with AI" textAlignment="CENTER" wrapText="true">
+            <font>
+                <Font size="49.0" />
+            </font>
+            <VBox.margin>
+                <Insets bottom="50.0" />
+            </VBox.margin>
+        </Label>
+        <HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="20.0">
+            <VBox alignment="CENTER" spacing="5.0">
+                <Label fx:id="left_label" text="Player X">
+                    <font>
+                        <Font size="19.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER">
+                    <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#userXClicked" prefHeight="39.0" prefWidth="90.0" text="user">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </ToggleButton>
+                    <ChoiceBox fx:id="levelX" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="134.0" />
+                </HBox>
+                <TextField fx:id="nameX" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Player X's name" visible="false">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </TextField>
+            <ColorPicker fx:id="colorX" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="226.0" visible="false" />
+            </VBox>
+            <VBox alignment="CENTER" spacing="5.0">
+                <Label fx:id="right_label" text="Player O">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <HBox alignment="CENTER">
+                    <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onMouseClicked="#userOClicked" prefHeight="39.0" prefWidth="90.0" text="user">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </ToggleButton>
+                    <ChoiceBox fx:id="levelO" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="39.0" prefWidth="134.0" />
+                </HBox>
+                <TextField fx:id="nameO" alignment="CENTER" promptText="Player O's name" visible="false">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </TextField>
+            <ColorPicker fx:id="colorO" editable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="test2" visible="false" />
+            </VBox>
+        </HBox>
+        <Button fx:id="play" graphicTextGap="0.0" mnemonicParsing="false" onMouseClicked="#playGame" text="PLAY" textAlignment="CENTER">
+            <font>
+                <Font size="24.0" />
+            </font>
+            <VBox.margin>
+                <Insets top="50.0" />
+            </VBox.margin>
+        </Button>
+    </VBox>
 </StackPane>

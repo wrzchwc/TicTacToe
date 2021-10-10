@@ -1,10 +1,12 @@
 package com.company;
 
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +17,10 @@ public class GameController {
     public Button nextX;
     @FXML
     public Button nextO;
+    @FXML
+    public Button restart;
+    @FXML
+    public Button newGame;
     @FXML
     private Label nameX;
     @FXML
@@ -57,6 +63,7 @@ public class GameController {
             label.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
                 if (label.getText().equals("") && (order && !LEVELS.contains(names[0]) || !order && !LEVELS.contains(names[1])) && !game.isFinalState()) {
                     label.setText(order ? "X" : "O");
+                    label.setTextFill(MenuController.getColors()[order ? 0 : 1]);
                     try {
                         game.moveUser(new int[]{tmp / 3, tmp % 3}, order);
                     } catch (IOException e) {
@@ -70,6 +77,7 @@ public class GameController {
                         order = !order;
                     }
                 }
+                buttons();
             });
             index++;
         }
@@ -104,11 +112,34 @@ public class GameController {
             BOARD.get(game.getRecentMove()).setText(Game.X);
         }
         order = !order;
+        buttons();
+    }
+
+    private void buttons() {
         if (game.isFinalState()) {
             nextX.setDisable(true);
             nextO.setDisable(true);
+            newGame.setVisible(true);
+            restart.setVisible(true);
         }
     }
 
+    @FXML
+    public void back() {
+        Stage stage = (Stage) newGame.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    public void restart() {
+        for (Label B : BOARD) {
+            B.setText("");
+            B.setTextFill(Color.BLACK);
+        }
+        game.restart();
+        order = true;
+        restart.setVisible(false);
+        newGame.setVisible(false);
+    }
 
 }

@@ -1,0 +1,43 @@
+.root {
+    -fx-background-color: #020100;
+}
+
+#title,
+#left_label,
+#right_label {
+    -fx-text-fill: #FDFFFC;
+}
+
+.choice-box {
+    -fx-background-color: #020100;
+    -fx-border-color: #FDFFFC;
+}
+
+.color-picker{
+    -fx-background-color: #FFAE03;
+}
+
+#nameO,
+#nameX {
+    -fx-background-color: #ED1C24;
+}
+
+.toggle-button {
+    -fx-background-color: #235789;
+}
+
+.toggle-button,
+#play {
+    -fx-text-fill: #FDFFFC;
+}
+
+.toggle-button,
+.choice-box,
+#play {
+    -fx-border-radius: 5px;
+}
+
+#play {
+    -fx-background-color: #5AFF15;
+    -fx-text-fill: #020100;
+}

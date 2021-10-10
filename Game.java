@@ -44,37 +44,6 @@ public class Game {
         System.out.println(String.format("%1$" + 9 + "s", "").replace(' ', '-'));
     }
 
-    public void start() {
-        var order = true;
-        while (finalResult(board).equals(NOT_FINISHED)) {
-            printBoard();
-//            if (order) {
-//                if (playerX.equals("user")) {
-//                    while (!moveUser(getCoordinates(), true)) {
-//                        cellOccupiedWarning();
-//                    }
-//                } else {
-//                    moveAI(true, playerX);
-//                }
-//            } else {
-//                if (playerO.equals("user")) {
-//                    while (!moveUser(getCoordinates(), false)) {
-//                        cellOccupiedWarning();
-//                    }
-//                } else {
-//                    moveAI(false, playerO);
-//                }
-//            }
-            order = !order;
-        }
-        printBoard();
-        System.out.println(finalResult(board));
-    }
-
-    void cellOccupiedWarning() {
-        System.out.println("This cell is occupied! Choose another one!");
-    }
-
     public void moveAI(boolean order, String difficultyLevel) throws IOException {
         if (difficultyLevel.equals("hard")) {
             hardMove(order);
@@ -285,6 +254,13 @@ public class Game {
             finalState = true;
             Result.displayResult();
         }
+    }
+
+    public void restart() {
+        for (String[] row : board) {
+            Arrays.fill(row, EMPTY);
+        }
+        finalState = false;
     }
 }
 
