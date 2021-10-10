@@ -2,15 +2,19 @@ package com.company;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
+    @FXML
+    public Button nextX;
+    @FXML
+    public Button nextO;
     @FXML
     private Label nameX;
     @FXML
@@ -33,37 +37,77 @@ public class GameController {
     private Label board21;
     @FXML
     private Label board22;
-    @FXML
-    private GridPane board;
 
     private boolean order = true;
+    public static final ArrayList<String> LEVELS = new ArrayList<>(List.of("easy", "medium", "hard"));
+    private ArrayList<Label> BOARD;
+    private Game game;
+
 
     @FXML
-    void initialize() throws NoSuchFieldException {
-        nameX.setText(analyzePlayer(MenuController.getNames()[0]));
-        nameO.setText(analyzePlayer(MenuController.getNames()[1]));
+    void initialize() {
+        var names = MenuController.getNames();
+        BOARD = new ArrayList<>(List.of(board00, board01, board02, board10, board11, board12, board20, board21, board22));
+        nameX.setText(analyzePlayer(names[0], nextX, false));
+        nameO.setText(analyzePlayer(names[1], nextO, true));
 
-        var list = new ArrayList<Label>(List.of(board00, board01, board02, board10, board11, board12, board20, board21, board22));
-        for (Label l : list) {
-            l.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    l.setText(order ? "X" : "O");
-                    order = !order;
+        var index = 0;
+        for (Label label : BOARD) {
+            int tmp = index;
+            label.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                if (label.getText().equals("") && (order && !LEVELS.contains(names[0]) || !order && !LEVELS.contains(names[1])) && !game.isFinalState()) {
+                    label.setText(order ? "X" : "O");
+                    try {
+                        game.moveUser(new int[]{tmp / 3, tmp % 3}, order);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (LEVELS.contains(names[1])) {
+                            nextO.setDisable(false);
+                        } else if (LEVELS.contains(names[0])) {
+                            nextX.setDisable(false);
+                        }
+                        order = !order;
+                    }
                 }
             });
+            index++;
         }
+        game = new Game(MenuController.getSetup(names));
 
-        var menu = new Menu();
-        menu.run();
     }
 
-    private String analyzePlayer(String name) {
-        var levels = new ArrayList<String>(List.of("easy", "medium", "hard"));
-        if (levels.contains(name)) {
+    //"Next move" buttons become visible if they are needed
+    private String analyzePlayer(String name, Button button, boolean disabled) {
+        if (LEVELS.contains(name)) {
+            button.setVisible(true);
+            button.setDisable(disabled);
             return "AI (" + name + ")";
         }
         return name;
+    }
+
+    @FXML
+    private void nextClicked() throws IOException {
+        //O's turn
+        if (nextX.isDisabled() || !nextX.isVisible()) {
+            nextX.setDisable(false);
+            nextO.setDisable(true);
+            game.moveAI(order, game.getPlayerO());
+            BOARD.get(game.getRecentMove()).setText(Game.O);
+        }
+        //X's turn
+        else {
+            nextO.setDisable(false);
+            nextX.setDisable(true);
+            game.moveAI(order, game.getPlayerX());
+            BOARD.get(game.getRecentMove()).setText(Game.X);
+        }
+        order = !order;
+        if (game.isFinalState()) {
+            nextX.setDisable(true);
+            nextO.setDisable(true);
+        }
     }
 
 

@@ -9,12 +9,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+
+import static com.company.Game.PLAYER_O;
+import static com.company.Game.PLAYER_X;
 
 public class MenuController {
 
@@ -82,8 +87,18 @@ public class MenuController {
         Scene scene = new Scene(view);
         Stage window = new Stage();
 
+        window.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("icon.png"))));
         window.setScene(scene);
         window.setTitle(title);
         window.show();
+    }
+
+    public static HashMap<String, String> getSetup(String[] parameters) {
+        for (String parameter : parameters) {
+            if (!GameController.LEVELS.contains(parameter)) {
+                parameter = "user";
+            }
+        }
+        return new HashMap<>(Map.of(PLAYER_X, parameters[0], PLAYER_O, parameters[1]));
     }
 }
