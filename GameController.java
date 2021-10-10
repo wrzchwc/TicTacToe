@@ -134,12 +134,12 @@ public class GameController {
     public void restart() {
         for (Label B : BOARD) {
             B.setText("");
-            B.setTextFill(Color.BLACK);
         }
         game.restart();
         order = true;
         restart.setVisible(false);
         newGame.setVisible(false);
+        nextX.setDisable(false);
     }
 
 }

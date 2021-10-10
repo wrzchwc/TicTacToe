@@ -1,0 +1,14 @@
+.root{
+    -fx-background-color: #020100;
+}
+.label{
+    -fx-text-fill: #FDFFFC;
+}
+#result{
+    -fx-text-fill: #FFAE03;
+}
+
+#ok{
+    -fx-background-color: #5AFF15;
+    -fx-text-fill: #020100;
+}

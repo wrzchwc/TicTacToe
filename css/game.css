@@ -1,0 +1,28 @@
+.root {
+    -fx-background-color: #020100;
+}
+
+#nextX,
+#nextO {
+    -fx-background-color: #235789;
+}
+
+#restart {
+    -fx-background-color: #ED1C24;
+}
+
+#newGame {
+    -fx-background-color: #5AFF15;
+    -fx-text-fill: #020100;
+}
+
+.grid-style Line {
+    -fx-stroke: #FDFFFC;
+}
+
+.label,
+#restart,
+#nextX,
+#nextO {
+    -fx-text-fill: #FDFFFC;
+}
