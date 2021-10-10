@@ -40,6 +40,7 @@ Users can optionally change color of their symbols. The default one is `White`.
 If player is playing personally, the only thing to make a move is to click on the desired field of the board. To invoke
 move made by computer `Next move` button needs to be clicked. After the game is finished user can return to main menu by
 clicking `NEW GAME` button or play again with the same configuration by clicking `RESTART` button.
+
 ![](images/screenshot5.jpg)
 
 Image above presents sample capture of the gameplay. As we can see `Emilia` drew with computer playing on hard
