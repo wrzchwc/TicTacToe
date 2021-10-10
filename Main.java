@@ -18,7 +18,7 @@ public class Main extends Application {
         StackPane stackPane = fxmlLoader.load();
         Scene scene = new Scene(stackPane);
 
-        primaryStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("icon.png"))));
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("images/icon.png"))));
         primaryStage.setTitle("Tic-Tac-Toe with AI");
         primaryStage.setScene(scene);
         primaryStage.show();

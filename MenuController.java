@@ -59,8 +59,8 @@ public class MenuController {
         levelO.setItems(levels);
         levelX.setValue(levels.get(0));
         levelO.setValue(levels.get(0));
-        colorX.setValue(Color.BLACK);
-        colorO.setValue(Color.BLACK);
+        colorX.setValue(Color.WHITE);
+        colorO.setValue(Color.WHITE);
     }
 
     @FXML
@@ -107,7 +107,7 @@ public class MenuController {
         Scene scene = new Scene(view);
         Stage window = new Stage();
 
-        window.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("icon.png"))));
+        window.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("images/icon.png"))));
         window.setScene(scene);
         window.setTitle(title);
         window.show();

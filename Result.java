@@ -109,7 +109,7 @@ public class Result {
         Scene scene = new Scene(view);
         Stage window = new Stage();
 
-        window.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("icon.png"))));
+        window.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("images/icon.png"))));
         window.setScene(scene);
         window.setTitle("Game Result");
         window.setIconified(false);
