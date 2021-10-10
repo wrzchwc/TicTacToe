@@ -33,12 +33,12 @@ empty.
 
 ![](images/screenshot4.jpg)
 
-Users can optionally change color of their symbols. The default color is `white`.
+Users can optionally change color of their symbols. The default one is `white`.
 
 ## Gameplay
 
 If player is playing personally, the only thing to make a move is to click on the desired field of the board. To invoke
-move made by computer `Next move` needs to be clicked. After the game is finished user can return to main menu by
+move made by computer `Next move` button needs to be clicked. After the game is finished user can return to main menu by
 clicking `NEW GAME` button or play again with the same configuration by clicking `RESTART` button.
 ![](images/screenshot5.jpg)
 
@@ -53,7 +53,7 @@ difficulty level. Image bellow presents the sample window informing about the re
 - FXML
 - CSS
 
-##Sources
+## Sources
 The `icon.png` file can be found [here](https://cdn0.iconfinder.com/data/icons/web-ui-vol-4/64/tic_tac_toe-512.png).
 
 
